@@ -260,7 +260,7 @@
 <header>
   <h1>🎾 Padel Regel-Quiz</h1>
   <p>Teste dein Wissen über die offiziellen Padel-Regeln</p>
-  <span class="badge">FIP Regeln · DPV · 12 Szenarien</span>
+  <span class="badge">FIP Regeln · DPV · 25 Fragen im Pool</span>
 </header>
 
 <main>
@@ -270,8 +270,9 @@
     <div class="start-icon">🏆</div>
     <div class="start-title">Bist du ein Padel-Regelprofi?</div>
     <p class="start-text">
-      12 realistische Spielszenarien warten auf dich — von Netzberührungen über Wandbälle
-      bis hin zu Situationen, die selbst erfahrene Spieler ins Grübeln bringen.<br><br>
+      Jedes Mal 12 zufällig ausgewählte Fragen aus einem Pool von 25 Szenarien —
+      von Netzberührungen über Wandbälle bis hin zu Situationen, die selbst erfahrene
+      Spieler ins Grübeln bringen.<br><br>
       Jede Frage wird mit dem genauen Regelartikel der <strong>FIP (International Padel Federation)</strong>
       erklärt, auf deren Basis auch der Deutsche Padel Verband (DPV) die Regeln anwendet.
     </p>
@@ -481,6 +482,175 @@ const questions = [
     correct: 1,
     explanation: "Im Padel gibt es keine Regel, die einen Spieler verpflichtet, aufrecht zu stehen oder die bestimmte Körperhaltungen beim Schlag verbietet. Sich auf den Boden zu werfen und von dort zu schlagen ist vollkommen legal, solange der Ball korrekt gespielt wird. Diese Technik wird vor allem bei schwierigen tiefen Bällen eingesetzt.",
     cite: "FIP Regelwerk (allgemeine Schlagregeln): Das Regelwerk enthält keine Bestimmung, die eine bestimmte Körperhaltung beim Schlag vorschreibt. Entscheidend ist, dass der Ball korrekt mit dem Schläger gespielt wird und alle anderen Regeln eingehalten werden."
+  },
+  {
+    tag: "Aufschlag-Höhe",
+    question: "Der Aufschläger trifft den Ball auf Hüfthöhe – exakt auf Höhe des Gürtels. Ist der Aufschlag gültig?",
+    answers: [
+      "Ja – der Ball muss unter Hüfthöhe getroffen werden, also ist genau Hüfthöhe ein Fehler.",
+      "Nein – der Ball muss eindeutig unterhalb der Hüfte getroffen werden.",
+      "Let – der Schiedsrichter wiederholt den Aufschlag bei Unklarheit.",
+      "Ja – Hüfthöhe ist ausdrücklich erlaubt."
+    ],
+    correct: 1,
+    explanation: "Beim Aufschlag muss der Ball unterhalb der Gürtellinie (Hüfthöhe) getroffen werden. 'Unterhalb' bedeutet eindeutig tiefer als die Hüfte – genau auf Höhe der Hüfte ist ein Fehler, da die Regel 'below waist level' fordert.",
+    cite: "FIP Regel 13.1 (Aufschlag): Der Ball muss im Moment des Schlages unterhalb der Gürtellinie des Aufschlägers getroffen werden."
+  },
+  {
+    tag: "Reihenfolge",
+    question: "Team A spielt: Spieler 1 schlägt den Ball, der dann versehentlich noch Spieler 2 (seinen Partner) touchiert, bevor er über das Netz geht. Was gilt?",
+    answers: [
+      "Gut – der Ball ist über das Netz gegangen, das zählt.",
+      "Fehler – der Ball darf nur von einem Spieler pro Schlag berührt werden.",
+      "Let – unbeabsichtigte Berührungen werden wiederholt.",
+      "Nur Fehler, wenn der Gegner Einspruch erhebt."
+    ],
+    correct: 1,
+    explanation: "Ein Ball darf pro Schlag nur einen Spieler berühren. Berührt der Ball nach dem Schlag noch den Partner, bevor er das Netz überquert, ist das ein Fehler – egal ob absichtlich oder unabsichtlich.",
+    cite: "FIP Regel 17 (Ball berührt Spieler): Es ist ein Fehler, wenn der Ball nach dem Schlag einen anderen Spieler derselben Mannschaft berührt, bevor er das Netz überquert."
+  },
+  {
+    tag: "Aufschlagfeld",
+    question: "Der Aufschlag landet auf der Mittellinie des Aufschlagfeldes. Ist der Aufschlag gültig?",
+    answers: [
+      "Fehler – der Ball muss innerhalb des Feldes landen, die Linie zählt nicht.",
+      "Gut – Bälle auf der Linie gelten als im Feld.",
+      "Let – Wiederholung bei Linienberührung.",
+      "Nur gültig beim ersten Aufschlag."
+    ],
+    correct: 1,
+    explanation: "Im Padel gelten alle Linien als Teil des Feldes, das sie begrenzen. Ein Ball, der die Linie berührt, gilt als im Feld – das gilt auch für die Mittellinie und die Seitenlinien des Aufschlagfeldes.",
+    cite: "FIP Regel 11 (Linien): Bälle, die eine Linie berühren, gelten als innerhalb des durch diese Linie begrenzten Feldes."
+  },
+  {
+    tag: "Netz überqueren",
+    question: "Spieler A schlägt den Ball so stark mit Slice, dass der Ball nach dem Überqueren des Netzes durch den Drall zurück auf seine eigene Seite dreht – ohne dass ein Gegner ihn berührt. Was gilt?",
+    answers: [
+      "Punkt für A – der Ball hat das Netz korrekt überquert.",
+      "Fehler für A – der Ball muss auf der gegnerischen Seite bleiben.",
+      "Let – ungewöhnliche Flugbahn, Wiederholung.",
+      "Punkt für die Gegner – der Ball kam zurück."
+    ],
+    correct: 3,
+    explanation: "Wenn der Ball das Netz überquert und durch Drall oder Wind zurück auf die Seite des Schlägers dreht, ohne dass ein Gegner ihn berührt, verliert das schlagende Team den Punkt. Der Ball muss auf der gegnerischen Seite verbleiben.",
+    cite: "FIP Regel 12 (Ball im Spiel): Überquert der Ball das Netz und kehrt durch Rotation oder Wind auf die Seite des Schlägers zurück ohne vom Gegner berührt worden zu sein, ist das ein Fehler für das schlagende Team."
+  },
+  {
+    tag: "Verletzungsunterbrechung",
+    question: "Spieler A verletzt sich während eines Punktes und hält an. Der Punkt war noch nicht beendet. Was entscheidet der Schiedsrichter?",
+    answers: [
+      "Let – der Punkt wird aus Sicherheitsgründen wiederholt.",
+      "Punkt für die Gegner – das Spiel wurde unterbrochen.",
+      "Das Spiel wird pausiert, der Punkt zählt nicht.",
+      "Der Schiedsrichter entscheidet je nach Situation."
+    ],
+    correct: 1,
+    explanation: "Unterbricht ein Spieler den laufenden Punkt aus eigenem Antrieb (z.B. wegen einer Verletzung), verliert sein Team diesen Punkt. Nur wenn der Schiedsrichter das Spiel unterbricht, gibt es ein Let.",
+    cite: "FIP Regel 22 (Unterbrechungen): Unterbricht ein Spieler das Spiel ohne Erlaubnis des Schiedsrichters, verliert seine Mannschaft den laufenden Punkt."
+  },
+  {
+    tag: "Aufschlag-Fuß",
+    question: "Beim Aufschlag hebt der Aufschläger einen Fuß vom Boden ab und springt leicht. Ist das erlaubt?",
+    answers: [
+      "Ja – Springen beim Aufschlag ist im Padel erlaubt.",
+      "Nein – beide Füße müssen beim Abschlag auf dem Boden bleiben.",
+      "Nur erlaubt, wenn kein Fuß die Grundlinie übertritt.",
+      "Let – Wiederholung bei Unklarheit."
+    ],
+    correct: 1,
+    explanation: "Im Gegensatz zum Tennis ist Springen beim Padel-Aufschlag nicht erlaubt. Beide Füße müssen beim Aufschlag auf dem Boden hinter der Grundlinie bleiben. Das Abheben eines Fußes ist ein Fußfehler.",
+    cite: "FIP Regel 13.1 (Aufschlagposition): Beim Aufschlag müssen beide Füße des Aufschlägers hinter der Grundlinie auf dem Boden bleiben. Es ist nicht erlaubt, beim Aufschlag zu springen."
+  },
+  {
+    tag: "Ball zweimal abprallen",
+    question: "Ein schwieriger Ball prallt zweimal auf dem Boden auf, bevor der Spieler ihn erreicht und zurückspielt. Was gilt?",
+    answers: [
+      "Fehler – der Ball darf nur einmal aufprallen.",
+      "Gut – zwei Aufpraller sind im Padel erlaubt.",
+      "Let – bei schwierigen Bällen wird wiederholt.",
+      "Nur Fehler wenn der Gegner Einspruch erhebt."
+    ],
+    correct: 0,
+    explanation: "Wie im Tennis darf der Ball im Padel nur einmal aufprallen. Lässt ein Spieler den Ball zweimal aufprallen, verliert sein Team den Punkt – unabhängig davon wie schwierig der Ball zu erreichen war.",
+    cite: "FIP Regel 12 (Ball im Spiel): Der Ball darf nach dem Überqueren des Netzes nur einmal auf dem Boden aufprallen, bevor er zurückgespielt werden muss."
+  },
+  {
+    tag: "Schläger verlassen",
+    question: "Beim Schlag fliegt der Schläger aus der Hand des Spielers und berührt das Netz. Was gilt?",
+    answers: [
+      "Kein Fehler – der Schläger ist nicht der Spieler.",
+      "Fehler – der Schläger gilt als Teil der Ausrüstung des Spielers.",
+      "Let – unbeabsichtigte Ereignisse werden wiederholt.",
+      "Nur Fehler wenn der Schläger den Ball berührt hat."
+    ],
+    correct: 1,
+    explanation: "Der Schläger gilt als Teil der Ausrüstung des Spielers. Berührt er das Netz, die Pfosten oder die gegnerische Seite, ist das genauso ein Fehler wie wenn der Spieler selbst das Netz berührt.",
+    cite: "FIP Regel 16 (Netzberührung): Schläger, Kleidung und sonstige Ausrüstung des Spielers dürfen das Netz oder die Pfosten nicht berühren, solange der Ball im Spiel ist."
+  },
+  {
+    tag: "Gegner stört",
+    question: "Spieler A ist kurz davor zu schlagen, als der Gegner laut ruft und ihn ablenkt. Spieler A schlägt den Ball ins Netz. Was kann Spieler A beantragen?",
+    answers: [
+      "Nichts – mentale Stärke ist Teil des Spiels.",
+      "Let – bei absichtlicher Störung durch den Gegner kann der Punkt wiederholt werden.",
+      "Punkt für A – absichtliche Störung ist ein Fehler des Gegners.",
+      "Disqualifikation des störenden Spielers."
+    ],
+    correct: 1,
+    explanation: "Wenn ein Spieler durch absichtliches Rufen oder andere Handlungen des Gegners bewusst gestört wird, kann der Schiedsrichter ein Let aussprechen und den Punkt wiederholen lassen. Bei wiederholter absichtlicher Störung kann der Schiedsrichter einen Fehler gegen das störende Team aussprechen.",
+    cite: "FIP Regel 22 (Hindernisse): Der Schiedsrichter kann einen Punkt wiederholen (Let), wenn ein Spieler durch absichtliche Aktionen des Gegners beim Schlag gestört wurde."
+  },
+  {
+    tag: "Aufschlag-Wiederholung",
+    question: "Beim zweiten Aufschlag tritt ein Let auf. Was passiert?",
+    answers: [
+      "Fehler – beim zweiten Aufschlag gibt es kein Let.",
+      "Der zweite Aufschlag wird wiederholt.",
+      "Der Aufschläger bekommt beide Aufschläge neu.",
+      "Der Punkt geht an den Rückschläger."
+    ],
+    correct: 1,
+    explanation: "Ein Let beim zweiten Aufschlag bedeutet, dass nur der zweite Aufschlag wiederholt wird – nicht beide. Der Aufschläger hat also weiterhin nur noch einen Versuch.",
+    cite: "FIP Regel 13.4 (Let beim Aufschlag): Tritt ein Let beim zweiten Aufschlag auf, wird ausschließlich der zweite Aufschlag wiederholt."
+  },
+  {
+    tag: "Seitenwechsel",
+    question: "Nach wie vielen Spielen wechseln die Teams im Padel die Seiten?",
+    answers: [
+      "Nach jedem Spiel.",
+      "Nach dem ersten Spiel, dann nach je zwei Spielen.",
+      "Nur nach jedem Satz.",
+      "Nach jedem dritten Spiel."
+    ],
+    correct: 1,
+    explanation: "Die Teams wechseln nach dem ersten Spiel die Seite, danach nach jeweils zwei weiteren Spielen. Im Tiebreak wird nach jeweils 6 gespielten Punkten gewechselt.",
+    cite: "FIP Regel 25 (Seitenwechsel): Die Spieler wechseln nach dem ersten Spiel die Seiten und danach nach jeweils zwei Spielen. Im Tiebreak erfolgt der Wechsel nach jeweils 6 Punkten."
+  },
+  {
+    tag: "Ball im Gitternetz",
+    question: "Der geschlagene Ball bleibt im Gitternetz hängen und fällt auf der Seite des Gegners zu Boden. Was gilt?",
+    answers: [
+      "Punkt für den Schläger – der Ball ist auf der gegnerischen Seite gelandet.",
+      "Let – der Punkt wird wiederholt.",
+      "Fehler für den Schläger – der Ball muss frei über das Netz fliegen.",
+      "Punkt für die Gegner – der Ball hat das Netz berührt."
+    ],
+    correct: 0,
+    explanation: "Bleibt der Ball im Gitternetz (über dem Netz) hängen und fällt dann auf der gegnerischen Seite zu Boden, gilt das als regulär – Punkt für den Schläger. Der Ball muss die Netzbegrenzung überquert haben.",
+    cite: "FIP Regel 12 (Ball im Spiel): Berührt der Ball das Netz, verbleibt dort und fällt dann auf die gegnerische Seite, gilt er als korrekt gespielt und der Punkt wird entsprechend gewertet."
+  },
+  {
+    tag: "Aufschlag-Seite",
+    question: "Von welcher Seite schlägt der Aufschläger beim Stand 30:15 auf?",
+    answers: [
+      "Von der rechten Seite (aus Sicht des Aufschlägers).",
+      "Von der linken Seite (aus Sicht des Aufschlägers).",
+      "Der Aufschläger darf frei wählen.",
+      "Von der gleichen Seite wie beim ersten Punkt."
+    ],
+    correct: 1,
+    explanation: "Der Aufschlag erfolgt abwechselnd von rechts und links. Beim Stand 0:0 wird von rechts aufgeschlagen. 15:0 und 0:15 = links, 30:0, 15:15 und 0:30 = rechts, 30:15 und 15:30 = links. Bei gerader Gesamtpunktzahl (0, 2, 4...) wird von rechts, bei ungerader (1, 3, 5...) von links aufgeschlagen.",
+    cite: "FIP Regel 13.2 (Aufschlag-Reihenfolge): Der erste Aufschlag eines Spiels erfolgt von der rechten Seite. Danach wird nach jedem Punkt die Seite gewechselt."
   }
 ];
 
@@ -499,7 +669,7 @@ function shuffle(arr) {
 }
 
 function startQuiz() {
-  shuffledQuestions = shuffle(questions);
+  shuffledQuestions = shuffle(questions).slice(0, 12);
   currentQ = 0;
   score = 0;
   document.getElementById('start-screen').style.display = 'none';
