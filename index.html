@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Padel Regel-Quiz – DPV / FIP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:   #2ecc71;
+      --green-d: #27ae60;
+      --red:     #e74c3c;
+      --red-d:   #c0392b;
+      --blue:    #1a73e8;
+      --blue-d:  #1557b0;
+      --bg:      #f0f4f0;
+      --card:    #ffffff;
+      --text:    #1a1a2e;
+      --muted:   #666;
+      --border:  #dde4dd;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Header ── */
+    header {
+      width: 100%;
+      background: linear-gradient(135deg, #1a4f2a 0%, #2ecc71 100%);
+      color: #fff;
+      text-align: center;
+      padding: 2rem 1rem 1.5rem;
+    }
+    header h1 { font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 900; letter-spacing: -0.5px; }
+    header p  { margin-top: .4rem; opacity: .85; font-size: .95rem; }
+    .badge {
+      display: inline-block;
+      margin-top: .8rem;
+      background: rgba(255,255,255,.2);
+      border: 1px solid rgba(255,255,255,.4);
+      border-radius: 20px;
+      padding: .25rem .9rem;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+
+    /* ── Main container ── */
+    main {
+      width: 100%;
+      max-width: 720px;
+      padding: 1.5rem 1rem 3rem;
+    }
+
+    /* ── Progress ── */
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.25rem;
+    }
+    .progress-bar-bg {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--blue));
+      border-radius: 99px;
+      transition: width .4s ease;
+    }
+    .progress-label { font-size: .82rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .score-label    { font-size: .82rem; font-weight: 700; color: var(--green-d); }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.08);
+      padding: 1.75rem;
+      animation: fadeIn .35s ease;
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+
+    .scenario-tag {
+      display: inline-block;
+      background: #e8f5e9;
+      color: var(--green-d);
+      border-radius: 8px;
+      padding: .2rem .7rem;
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      margin-bottom: .9rem;
+    }
+
+    .question { font-size: 1.15rem; font-weight: 700; line-height: 1.5; margin-bottom: 1.4rem; }
+
+    /* ── Answer buttons ── */
+    .answers { display: flex; flex-direction: column; gap: .65rem; }
+
+    .answer-btn {
+      width: 100%;
+      text-align: left;
+      background: #f7faf7;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: .9rem 1.1rem;
+      font-family: inherit;
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .1s;
+      line-height: 1.4;
+    }
+    .answer-btn:hover:not(:disabled) {
+      border-color: var(--blue);
+      background: #eef4fd;
+      transform: translateX(3px);
+    }
+    .answer-btn.correct {
+      border-color: var(--green);
+      background: #e8f5e9;
+      color: #1b5e20;
+    }
+    .answer-btn.wrong {
+      border-color: var(--red);
+      background: #fdecea;
+      color: #7f1d1d;
+    }
+    .answer-btn:disabled { cursor: default; transform: none; }
+
+    /* ── Explanation ── */
+    .explanation {
+      margin-top: 1.2rem;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      font-size: .9rem;
+      line-height: 1.6;
+      display: none;
+      animation: fadeIn .3s ease;
+    }
+    .explanation.show { display: block; }
+    .explanation.correct-exp { background: #e8f5e9; border-left: 4px solid var(--green); }
+    .explanation.wrong-exp   { background: #fdecea; border-left: 4px solid var(--red); }
+    .explanation strong { font-weight: 700; }
+    .rule-cite {
+      display: block;
+      margin-top: .6rem;
+      font-size: .82rem;
+      font-style: italic;
+      color: var(--muted);
+      background: rgba(0,0,0,.04);
+      border-radius: 6px;
+      padding: .45rem .7rem;
+    }
+
+    /* ── Next button ── */
+    .next-btn {
+      margin-top: 1.3rem;
+      display: none;
+      width: 100%;
+      padding: .85rem;
+      background: linear-gradient(135deg, var(--green-d), var(--blue-d));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    .next-btn:hover { opacity: .9; transform: translateY(-1px); }
+    .next-btn.show  { display: block; animation: fadeIn .3s ease; }
+
+    /* ── Result screen ── */
+    #result-screen { display: none; text-align: center; }
+    #result-screen.show { display: block; animation: fadeIn .5s ease; }
+
+    .result-emoji { font-size: 4rem; margin-bottom: .5rem; }
+    .result-title { font-size: 1.8rem; font-weight: 900; margin-bottom: .5rem; }
+    .result-subtitle { color: var(--muted); margin-bottom: 1.2rem; }
+    .result-score {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--green-d);
+      margin-bottom: .3rem;
+    }
+    .result-max { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+    .rank-card {
+      background: linear-gradient(135deg, #1a4f2a, #2ecc71);
+      color: #fff;
+      border-radius: 14px;
+      padding: 1.2rem 1.5rem;
+      margin: 0 auto 1.5rem;
+      max-width: 360px;
+    }
+    .rank-card .rank-name  { font-size: 1.25rem; font-weight: 900; }
+    .rank-card .rank-desc  { font-size: .88rem; opacity: .85; margin-top: .25rem; }
+
+    .restart-btn {
+      padding: .85rem 2.5rem;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .restart-btn:hover { opacity: .85; }
+
+    /* ── Start screen ── */
+    #start-screen { text-align: center; }
+    .start-icon { font-size: 3.5rem; margin-bottom: .75rem; }
+    .start-title { font-size: 1.5rem; font-weight: 900; margin-bottom: .5rem; }
+    .start-text  { color: var(--muted); font-size: .95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    .start-btn {
+      padding: .9rem 2.5rem;
+      background: linear-gradient(135deg, var(--green-d), var(--blue-d));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+    }
+    .start-btn:hover { opacity: .9; transform: translateY(-2px); }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: .78rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎾 Padel Regel-Quiz</h1>
+  <p>Teste dein Wissen über die offiziellen Padel-Regeln</p>
+  <span class="badge">FIP Regeln · DPV · 12 Szenarien</span>
+</header>
+
+<main>
+
+  <!-- Start Screen -->
+  <div class="card" id="start-screen">
+    <div class="start-icon">🏆</div>
+    <div class="start-title">Bist du ein Padel-Regelprofi?</div>
+    <p class="start-text">
+      12 realistische Spielszenarien warten auf dich — von Netzberührungen über Wandbälle
+      bis hin zu Situationen, die selbst erfahrene Spieler ins Grübeln bringen.<br><br>
+      Jede Frage wird mit dem genauen Regelartikel der <strong>FIP (International Padel Federation)</strong>
+      erklärt, auf deren Basis auch der Deutsche Padel Verband (DPV) die Regeln anwendet.
+    </p>
+    <button class="start-btn" onclick="startQuiz()">Quiz starten →</button>
+  </div>
+
+  <!-- Progress (hidden initially) -->
+  <div class="progress-wrap" id="progress-wrap" style="display:none">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <span class="progress-label" id="progress-label">1 / 12</span>
+    <span class="score-label" id="score-label">✓ 0</span>
+  </div>
+
+  <!-- Quiz Card (hidden initially) -->
+  <div class="card" id="quiz-card" style="display:none">
+    <span class="scenario-tag" id="q-tag"></span>
+    <div class="question" id="q-text"></div>
+    <div class="answers" id="q-answers"></div>
+    <div class="explanation" id="q-explanation"></div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Nächste Frage →</button>
+  </div>
+
+  <!-- Result Screen -->
+  <div class="card" id="result-screen">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-title" id="result-title"></div>
+    <div class="result-subtitle" id="result-subtitle"></div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-max" id="result-max"></div>
+    <div class="rank-card">
+      <div class="rank-name" id="rank-name"></div>
+      <div class="rank-desc" id="rank-desc"></div>
+    </div>
+    <button class="restart-btn" onclick="restartQuiz()">🔄 Nochmal spielen</button>
+  </div>
+
+</main>
+
+<footer>Basierend auf den offiziellen FIP Padel Regeln (2023 Edition) &amp; Deutscher Padel Verband (DPV)</footer>
+
+<script>
+const questions = [
+  {
+    tag: "Aufschlag",
+    question: "Beim Aufschlag springt der Ball nach dem Abprall vom Boden und berührt die Seitenwand, bevor der Rückschläger ihn erreicht. Was gilt?",
+    answers: [
+      "Fehler – der Aufschlag ist ungültig.",
+      "Gut – der Aufschlag ist gültig, das Spiel läuft weiter.",
+      "Let – der Aufschlag wird wiederholt.",
+      "Fehler nur, wenn die Wand vor dem Aufschlagfeld ist."
+    ],
+    correct: 1,
+    explanation: "Ein Aufschlag ist gültig, wenn der Ball nach dem Aufprall im richtigen Aufschlagfeld landet und dann – ohne dass der Gegner ihn berührt – eine Wand oder das Gitternetz des Feldes des Gegners berührt. Der Ball darf nach dem Aufprall im Aufschlagfeld die Wände berühren.",
+    cite: "FIP Regel 13 (Aufschlag): Der Aufschlag ist korrekt ausgeführt, wenn der Ball im diagonalen Aufschlagfeld aufprallt und danach die Rück- oder Seitenwand des Empfängerfeldes berührt, ohne den Boden erneut zu berühren."
+  },
+  {
+    tag: "Netzberührung",
+    question: "Spielerin A gibt einen Volley ab. Ihr Schläger berührt dabei kurz das Netz, aber der Ball hat das Netz bereits passiert und landet im gegnerischen Feld. Was ist die Entscheidung?",
+    answers: [
+      "Punkt für A – der Ball war schon drüben.",
+      "Fehler für A – die Netzberührung kostet den Punkt.",
+      "Let – der Punkt wird wiederholt.",
+      "Nur Fehler, wenn der Gegner es gesehen hat."
+    ],
+    correct: 1,
+    explanation: "Jede Berührung des Netzes, der Netzpfosten oder der Netzbefestigung durch einen Spieler, seinen Schläger oder seine Kleidung während des laufenden Punktes führt automatisch zum Punktverlust – unabhängig davon, ob der Ball bereits die Seite gewechselt hat.",
+    cite: "FIP Regel 16 (Netzberührungen): Es ist ein Fehler, wenn ein Spieler, sein Schläger oder seine Kleidung das Netz, die Pfosten oder eines der Seile berührt, solange der Ball im Spiel ist."
+  },
+  {
+    tag: "Mitspieler-Treffer",
+    question: "Spieler B gibt einen Schmetterball ab. Der Ball trifft auf dem Rückweg seinen eigenen Partner C, bevor er den Boden berührt. Was gilt?",
+    answers: [
+      "Punkt für die Gegner – der Ball hat einen Spieler der schlagenden Mannschaft getroffen.",
+      "Punkt für das Team von B – der Ball war bereits im gegnerischen Feld.",
+      "Let – der Punkt wird wiederholt.",
+      "Kein Fehler – der Partner steht außerhalb des Courts."
+    ],
+    correct: 0,
+    explanation: "Trifft der Ball einen Spieler oder dessen Ausrüstung auf der eigenen Seite, während der Ball noch im Spiel ist (also vor Punktende), verliert das Team dieses Spielers den Punkt. Es spielt keine Rolle, ob der Ball vorher das gegnerische Feld passiert hat.",
+    cite: "FIP Regel 17 (Ball trifft Spieler): Es ist ein Fehler, wenn der Ball einen Spieler oder irgendetwas, das er trägt oder hält (außer dem Schläger), berührt."
+  },
+  {
+    tag: "Ball an der Wand",
+    question: "Der Gegner schlägt den Ball, der die Rückwand deiner Seite berührt und dann wieder Richtung Netz zurückfliegt, ohne den Boden zu berühren. Du hast den Ball noch nicht gespielt. Muss der Ball noch gespielt werden?",
+    answers: [
+      "Nein – sobald der Ball die eigene Wand berührt, ist der Punkt vorbei.",
+      "Ja – du kannst den Ball noch vor dem zweiten Aufprall zurückspielen.",
+      "Der Punkt ist nur beendet, wenn der Ball ins Netz geht.",
+      "Ja, aber nur mit einem Volley."
+    ],
+    correct: 1,
+    explanation: "Im Padel ist es absolut erlaubt (und oft taktisch gefordert), den Ball zu spielen, nachdem er die eigene Rück- oder Seitenwand berührt hat – solange er noch nicht ein zweites Mal den Boden berührt hat. Das ist eine der fundamentalsten Regeln des Padels.",
+    cite: "FIP Regel 12 (Ball in Bewegung): Der Ball bleibt im Spiel, nachdem er die Wände oder das Gitter der eigenen Seite berührt hat. Der Spieler muss ihn zurückspielen, bevor er ein zweites Mal den Boden berührt."
+  },
+  {
+    tag: "Spieler verlässt Court",
+    question: "Der Ball fliegt durch eine Öffnung (Tür) aus dem Court heraus. Spieler A läuft durch dieselbe Öffnung nach draußen und schlägt den Ball von außerhalb des Courts zurück ins Spielfeld. Ist das erlaubt?",
+    answers: [
+      "Nein – Fehler. Der Spieler darf den Court nicht verlassen.",
+      "Ja – das ist eine legale und im Padel übliche Spielsituation.",
+      "Let – der Punkt wird wiederholt.",
+      "Nur erlaubt, wenn der Ball die Außenwand noch nicht berührt hat."
+    ],
+    correct: 1,
+    explanation: "Im Padel ist es ausdrücklich erlaubt, den Court durch die Öffnungen (Türen oder Gitteröffnungen) zu verlassen und den Ball von außerhalb zurückzuspielen. Der Ball darf außerhalb des Courts gespielt werden, solange er die Grenzen der imaginären Verlängerung nicht überschritten hat.",
+    cite: "FIP Regel 14 (Ball außerhalb des Courts): Ein Spieler kann den Court durch eine Öffnung verlassen und den Ball außerhalb des Courts spielen, solange der Ball nicht eine Verlängerung der Umzäunung überschritten hat."
+  },
+  {
+    tag: "Doppelter Aufprall",
+    question: "Spieler D trifft den Ball, dieser springt vom Schlägerrahmen auf die Bespannung und wird dann über das Netz gespielt – alles in einer einzigen Bewegung. Was entscheidet der Schiedsrichter?",
+    answers: [
+      "Fehler – doppelter Ballkontakt ist immer verboten.",
+      "Gut – unbeabsichtigte Doppelkontakte in einer Bewegung sind erlaubt.",
+      "Let – Wiederholung des Punktes.",
+      "Fehler – der Schläger darf den Ball nur einmal berühren."
+    ],
+    correct: 1,
+    explanation: "Ein unbeabsichtigter Doppelkontakt in einer einzigen kontinuierlichen Schlagbewegung ist kein Fehler. Nur wenn ein Spieler den Ball bewusst zweimal oder mit einer zweiten Bewegung trifft, wird es als Fehler gewertet.",
+    cite: "FIP Regel 13.3 (Doppelkontakt): Es ist kein Fehler, wenn der Ball den Schläger zweimal in einer einzigen Schlagbewegung (versehentlich) berührt, solange der Schlag in einer einzigen kontinuierlichen Bewegung ausgeführt wird."
+  },
+  {
+    tag: "Körpertreffer",
+    question: "Ein harter Smash der Gegner trifft Spieler A direkt am Körper, ohne vorher ein zweites Mal den Boden berührt zu haben. Was gilt?",
+    answers: [
+      "Punkt für Spieler A – er wurde getroffen und hat Recht auf Wiederholung.",
+      "Punkt für die Gegner – der Ball hat den Körper von Spieler A getroffen.",
+      "Let – Wiederholung des Punktes aus Sicherheitsgründen.",
+      "Kein Fehler – Körpertreffer sind im Padel erlaubt."
+    ],
+    correct: 1,
+    explanation: "Trifft der Ball einen Spieler, ist das ein Fehler für das Team des getroffenen Spielers – unabhängig davon, ob es absichtlich oder unabsichtlich war. Der getroffene Körper zählt als Hindernis, das den Ball aufhält, bevor er korrekt gespielt werden konnte.",
+    cite: "FIP Regel 17 (Ball trifft Spieler): Es ist ein Fehler für eine Partei, wenn der Ball einen der Spieler dieser Partei oder etwas, das sie tragen oder halten, berührt (außer dem Schläger bei einem regulären Schlag)."
+  },
+  {
+    tag: "Aufschlag-Let",
+    question: "Beim Aufschlag streift der Ball das Netz und landet danach korrekt im diagonalen Aufschlagfeld. Was passiert?",
+    answers: [
+      "Fehler – der Aufschlag gilt als ungültig (zweiter Aufschlag).",
+      "Let – der Aufschlag wird ohne Verlust eines Aufschlages wiederholt.",
+      "Punkt für den Aufschläger – der Ball ist im Feld gelandet.",
+      "Fehler nur beim zweiten Aufschlag."
+    ],
+    correct: 1,
+    explanation: "Berührt der Aufschlagball das Netz (oder die Netzbefestigung) und landet danach im richtigen Aufschlagfeld, wird der Aufschlag als Let gewertet und komplett wiederholt – ohne dass ein Aufschlagversuch verloren geht.",
+    cite: "FIP Regel 13.4 (Let beim Aufschlag): Der Aufschlag wird als Let bezeichnet und wiederholt, wenn der gespielte Ball das Netz oder die Netzbefestigung streift und danach im diagonalen Aufschlagfeld oder auf der Linie landet."
+  },
+  {
+    tag: "Ball trifft Gitternetz",
+    question: "Dein Partner schlägt den Ball, der das Gitternetz auf eurer eigenen Seite trifft und dann über das Netz zum Gegner fliegt – ohne den Boden berührt zu haben. Ist das ein gültiger Schlag?",
+    answers: [
+      "Ja – erlaubt. Der Ball darf das eigene Gitternetz berühren.",
+      "Nein – der Ball muss direkt über das Netz gespielt werden.",
+      "Nur erlaubt, wenn der Ball danach noch den Boden auf eurer Seite berührt.",
+      "Fehler – das Gitternetz gilt als Hindernis."
+    ],
+    correct: 0,
+    explanation: "Im Padel ist es vollkommen legal, den Ball gegen das Gitternetz oder die Wand der eigenen Seite zu spielen, sodass er danach über das Netz fliegt. Diese Technik nennt sich 'Vibora' oder wird bei der 'Bandeja' eingesetzt.",
+    cite: "FIP Regel 12 (Gültiger Schlag): Es ist ein korrekter Schlag, wenn der Ball von einem Spieler so gespielt wird, dass er die Wand oder das Gitter der eigenen Seite berührt und danach das Netz überquert, ohne den Boden zu berühren."
+  },
+  {
+    tag: "Aufschlag-Position",
+    question: "Beim Aufschlag hat der Aufschläger seinen Fuß auf der Grundlinie. Ist der Aufschlag gültig?",
+    answers: [
+      "Ja – der Fuß darf auf der Linie sein.",
+      "Nein – Fußfehler. Beide Füße müssen hinter der Grundlinie sein.",
+      "Ja – solange der Fuß die Linie nicht vollständig übertritt.",
+      "Let – Wiederholung des Aufschlags."
+    ],
+    correct: 1,
+    explanation: "Der Aufschläger muss beide Füße hinter der Grundlinie haben, wenn er den Ball schlägt. Berührt ein Fuß die Grundlinie, ist das ein Fußfehler und damit ein Aufschlagfehler. Der Fuß muss sich vollständig hinter der Linie befinden.",
+    cite: "FIP Regel 13.1 (Aufschlagposition): Der Aufschläger muss sich hinter der Grundlinie zwischen der Mittellinie und der Seitenwand aufstellen. Beim Aufschlag müssen beide Füße hinter der Grundlinie bleiben und der Ball unter Hüfthöhe getroffen werden."
+  },
+  {
+    tag: "Ball berührt Tür",
+    question: "Der gespielte Ball berührt die geschlossene Zugangsöffnung (Tür) und springt ins Spielfeld zurück. Wie wird das gewertet?",
+    answers: [
+      "Let – der Punkt wird wiederholt.",
+      "Fehler für das Team, das den Ball gespielt hat.",
+      "Gut – der Ball ist wie ein Wandball zu spielen.",
+      "Fehler für das Team, das den Ball empfangen hätte."
+    ],
+    correct: 2,
+    explanation: "Türen und Öffnungen sind fester Bestandteil des Padel-Courts. Ein Ball, der die Tür oder die Umrandung des Courts berührt, wird genauso behandelt wie ein Wandball – er ist weiter im Spiel und muss gespielt werden.",
+    cite: "FIP Regel 10 (Courtstruktur): Türen und Öffnungen sind integraler Bestandteil des Courts. Ein Ball, der diese Elemente berührt, ist weiter im Spiel und wird wie ein regulärer Wandball behandelt."
+  },
+  {
+    tag: "Sich in den Ball werfen",
+    question: "Spieler A wirft sich zu Boden und schlägt den Ball flach – ein sogenannter 'Bajada'. Der Ball geht regulär über das Netz. Ist dieser Schlag gültig?",
+    answers: [
+      "Nein – Fehler. Im Padel darf man sich nicht zu Boden werfen.",
+      "Ja – es gibt im Padel keine Regel, die das Werfen auf den Boden verbietet.",
+      "Let – der Schlag wird aus Sicherheitsgründen wiederholt.",
+      "Nur gültig, wenn der Ball nicht den Boden berührt hat, bevor er gespielt wird."
+    ],
+    correct: 1,
+    explanation: "Im Padel gibt es keine Regel, die einen Spieler verpflichtet, aufrecht zu stehen oder die bestimmte Körperhaltungen beim Schlag verbietet. Sich auf den Boden zu werfen und von dort zu schlagen ist vollkommen legal, solange der Ball korrekt gespielt wird. Diese Technik wird vor allem bei schwierigen tiefen Bällen eingesetzt.",
+    cite: "FIP Regelwerk (allgemeine Schlagregeln): Das Regelwerk enthält keine Bestimmung, die eine bestimmte Körperhaltung beim Schlag vorschreibt. Entscheidend ist, dass der Ball korrekt mit dem Schläger gespielt wird und alle anderen Regeln eingehalten werden."
+  }
+];
+
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let shuffledQuestions = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  shuffledQuestions = shuffle(questions);
+  currentQ = 0;
+  score = 0;
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('progress-wrap').style.display = 'flex';
+  document.getElementById('quiz-card').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  answered = false;
+  const q = shuffledQuestions[currentQ];
+  const total = shuffledQuestions.length;
+
+  // Progress
+  const pct = (currentQ / total) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = (currentQ + 1) + ' / ' + total;
+  document.getElementById('score-label').textContent = '✓ ' + score;
+
+  // Tag & question
+  document.getElementById('q-tag').textContent = q.tag;
+  document.getElementById('q-text').textContent = q.question;
+
+  // Answers
+  const container = document.getElementById('q-answers');
+  container.innerHTML = '';
+  q.answers.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.textContent = ans;
+    btn.onclick = () => selectAnswer(i);
+    container.appendChild(btn);
+  });
+
+  // Hide explanation & next
+  const exp = document.getElementById('q-explanation');
+  exp.className = 'explanation';
+  exp.innerHTML = '';
+  const nextBtn = document.getElementById('next-btn');
+  nextBtn.className = 'next-btn';
+  nextBtn.textContent = currentQ < shuffledQuestions.length - 1 ? 'Nächste Frage →' : 'Ergebnis anzeigen →';
+
+  // Animate card
+  const card = document.getElementById('quiz-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = 'fadeIn .35s ease';
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+
+  const q = shuffledQuestions[currentQ];
+  const buttons = document.querySelectorAll('.answer-btn');
+  const isCorrect = idx === q.correct;
+
+  buttons.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    if (i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+
+  if (isCorrect) score++;
+
+  // Explanation
+  const exp = document.getElementById('q-explanation');
+  exp.className = 'explanation show ' + (isCorrect ? 'correct-exp' : 'wrong-exp');
+  exp.innerHTML = `
+    <strong>${isCorrect ? '✅ Richtig!' : '❌ Leider falsch.'}</strong>
+    ${isCorrect ? '' : '<br>Die korrekte Antwort: <strong>' + q.answers[q.correct] + '</strong>'}
+    <br><br>${q.explanation}
+    <span class="rule-cite">📖 ${q.cite}</span>
+  `;
+
+  document.getElementById('next-btn').classList.add('show');
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= shuffledQuestions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.getElementById('progress-wrap').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'none';
+
+  const total = shuffledQuestions.length;
+  const pct = score / total;
+
+  let emoji, title, subtitle, rankName, rankDesc;
+
+  if (pct === 1) {
+    emoji = '🏅'; title = 'Perfektes Ergebnis!'; subtitle = 'Du kennst das Padel-Regelwerk in- und auswendig.';
+    rankName = '⚖️ Profi-Schiedsrichter'; rankDesc = 'Makelloses Regelwissen – du könntest FIP-Matches leiten!';
+  } else if (pct >= 0.8) {
+    emoji = '🎾'; title = 'Ausgezeichnet!'; subtitle = 'Du hast ein sehr solides Regelverständnis.';
+    rankName = '🌟 Regelexperte'; rankDesc = 'Sehr gutes Wissen – mit etwas Übung bald perfekt.';
+  } else if (pct >= 0.6) {
+    emoji = '💪'; title = 'Gut gemacht!'; subtitle = 'Du kennst die wichtigsten Regeln, aber es gibt noch Lücken.';
+    rankName = '📚 Fortgeschrittener'; rankDesc = 'Solide Basis – lies die FIP-Regeln nochmal durch.';
+  } else if (pct >= 0.4) {
+    emoji = '🤔'; title = 'Noch Luft nach oben'; subtitle = 'Einige Regeln sind noch nicht ganz sicher.';
+    rankName = '🎯 Lernender'; rankDesc = 'Guter Anfang – regelmäßiges Spielen schärft das Regelgefühl.';
+  } else {
+    emoji = '🐣'; title = 'Viel zu lernen!'; subtitle = 'Das Regelwerk ist komplex – üben macht den Meister.';
+    rankName = '🌱 Padel-Neuling'; rankDesc = 'Keine Sorge – ein Blick ins FIP-Regelwerk hilft schnell weiter.';
+  }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-subtitle').textContent = subtitle;
+  document.getElementById('result-score').textContent = score + ' / ' + total;
+  document.getElementById('result-max').textContent = 'korrekte Antworten';
+  document.getElementById('rank-name').textContent = rankName;
+  document.getElementById('rank-desc').textContent = rankDesc;
+
+  const rs = document.getElementById('result-screen');
+  rs.style.display = 'block';
+  void rs.offsetWidth;
+  rs.classList.add('show');
+}
+
+function restartQuiz() {
+  document.getElementById('result-screen').style.display = 'none';
+  document.getElementById('result-screen').classList.remove('show');
+  startQuiz();
+}
+</script>
+</body>
+</html>
